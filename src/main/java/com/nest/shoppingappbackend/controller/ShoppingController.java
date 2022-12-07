@@ -1,29 +1,51 @@
 package com.nest.shoppingappbackend.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.nest.shoppingappbackend.dao.ProductsDao;
+import com.nest.shoppingappbackend.dao.UserDao;
+import com.nest.shoppingappbackend.model.Products;
+import com.nest.shoppingappbackend.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class ShoppingController {
 
+    @Autowired
+    private ProductsDao pdao;
+    @Autowired
+    private UserDao udao;
+
     @CrossOrigin(origins = "*")
     @PostMapping(path = "/useradd", consumes = "application/json", produces = "application/json")
-    public String AddUser(){
-        return "user add";
+    public HashMap<String, String> AddUser(@RequestBody User u){
+        udao.save(u);
+        HashMap <String, String> map = new HashMap<>();
+        map.put("status","success");
+        return map;
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping(path = "/addproduct", consumes = "application/json", produces = "application/json")
-    public String AddProduct(){
-        return "product add";
+    public HashMap<String, String>  AddProduct(@RequestBody Products p){
+        pdao.save(p);
+        HashMap <String, String> map = new HashMap<>();
+        map.put("status","success");
+        return map;
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/viewproduct")
-    public String ViewProduct(){
-        return "products";
+    public List<Products> ViewProduct(){
+        return (List<Products>) pdao.findAll();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/login")
+    public List<User> Login(){
+        return (List<User>) udao.findAll();
     }
 
 }
