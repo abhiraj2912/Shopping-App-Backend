@@ -43,9 +43,16 @@ public class ShoppingController {
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping("/login")
-    public List<User> Login(){
-        return (List<User>) udao.findAll();
+    @PostMapping(path = "/login", consumes = "application/json", produces = "application/json")
+    public List<User> Login(@RequestBody User u){
+        return (List<User>) udao.LoginCheck(u.getEmail(), u.getPassword());
     }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/search", consumes = "application/json", produces = "application/json")
+    public List<Products> SearchProduct(@RequestBody Products p){
+        return (List<Products>) pdao.SearchProduct(p.getName());
+    }
+
 
 }
